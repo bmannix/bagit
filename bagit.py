@@ -554,10 +554,17 @@ def _make_opt_parser():
     parser.add_option('--processes', action='store', type="int",
                       dest='processes', default=1,
                       help='parallelize checksums generation')
-    parser.add_option('--log', action='store', dest='log')
-    parser.add_option('--quiet', action='store_true', dest='quiet')
-    parser.add_option('--validate', action='store_true', dest='validate')
-    parser.add_option('--fast', action='store_true', dest='fast')
+    parser.add_option('--log', action='store', dest='log', 
+                      help='provide a filename to save a logfile')
+    parser.add_option('--quiet', action='store_true', dest='quiet', 
+                      help='Only show ERROR level logs')
+    parser.add_option('--validate', action='store_true', dest='validate',
+                      help='Validates fixities of files on disk match the '
+                            'values stored in the manifest')
+    parser.add_option('--fast', action='store_true', dest='fast',
+                      help='Compares the Payload-Oxum of the content on disk '
+                           'with the value stored in the bag-info.txt.  Used '
+                           'with --validate')
 
     for header in _bag_info_headers:
         parser.add_option('--%s' % header.lower(), type="string",
