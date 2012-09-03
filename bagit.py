@@ -104,7 +104,7 @@ def make_bag(bag_dir, bag_info=None, processes=1):
             Oxum = _make_manifest('manifest-md5.txt', 'data', processes)
 
             logging.info("writing bagit.txt")
-            txt = """BagIt-Version: 0.96\nTag-File-Character-Encoding: UTF-8\n"""
+            txt = """BagIt-Version: 0.97\nTag-File-Character-Encoding: UTF-8\n"""
             open("bagit.txt", "wb").write(txt)
 
             logging.info("writing bag-info.txt")
@@ -177,7 +177,7 @@ class Bag(object):
 
         if self.version == "0.95":
             self.tag_file_name = "package-info.txt"
-        elif self.version == "0.96":
+        elif self.version == "0.96" or self.version == "0.97":
             self.tag_file_name = "bag-info.txt"
         else:
             raise BagError("Unsupported bag version: %s" % self.version)
@@ -314,9 +314,6 @@ class Bag(object):
             raise BagValidationError("Missing data directory")
 
     def _validate_structure_tag_files(self):
-        # Note: we deviate somewhat from v0.96 of the spec in that it allows
-        # other files and directories to be present in the base directory
-        # see 
         if len(list(self.manifest_files())) == 0:
             raise BagValidationError("Missing manifest file")
         if "bagit.txt" not in os.listdir(self.path):
@@ -560,7 +557,7 @@ def _make_opt_parser():
                       help='Only show ERROR level logs')
     parser.add_option('--validate', action='store_true', dest='validate',
                       help='Validates fixities of files on disk match the '
-                            'values stored in the manifest')
+                           'values stored in the manifest')
     parser.add_option('--fast', action='store_true', dest='fast',
                       help='Compares the Payload-Oxum of the content on disk '
                            'with the value stored in the bag-info.txt.  Used '
